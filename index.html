@@ -1,525 +1,449 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOJO DEVELOPER</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800;900&display=swap" rel="stylesheet">
-
-<style>
-:root {
-    --primary: #007BFF;
-    --secondary: #0a0a0a;
-    --accent: #00BFFF;
-    --glass: rgba(255,255,255,0.05);
-    --gold: #FFD700;
-    --neon: #FF00FF;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-    font-family: 'Cairo', sans-serif;
-    background: var(--secondary);
-    color: #fff;
-    text-align: center;
-    overflow-x: hidden;
-}
-#bg-video {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.3) contrast(1.2);
-    z-index: -3;
-}
-body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.6), #000);
-    z-index: -2;
-}
-canvas {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-}
-#content {
-    max-width: 1000px;
-    margin: auto;
-    padding: 100px 20px;
-}
-.profile-pic {
-    width: 220px;
-    height: 220px;
-    margin: auto;
-    border-radius: 50%;
-    padding: 10px;
-    background: var(--primary);
-    box-shadow: 0 0 40px var(--primary), 0 0 80px var(--accent);
-    transition: 0.5s;
-}
-.profile-pic:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 80px var(--primary), 0 0 150px var(--accent);
-}
-.profile-pic img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    background: #111;
-}
-h1 {
-    margin: 30px 0 15px;
-    font-size: 3.8em;
-    font-weight: 900;
-    letter-spacing: 4px;
-    color: #fff;
-}
-h1 span {
-    color: var(--primary);
-    text-shadow: 0 0 25px var(--primary), 0 0 50px var(--accent);
-}
-.status-badge {
-    display: inline-block;
-    padding: 10px 25px;
-    border-radius: 50px;
-    background: rgba(0,255,0,0.1);
-    border: 1px solid #00ff00;
-    color: #00ff00;
-    font-weight: 800;
-    margin: 10px 0 30px;
-    font-size: 1.1em;
-}
-.description {
-    font-size: 1.2em;
-    color: #ccc;
-    line-height: 2;
-    margin-bottom: 40px;
-}
-.description .highlight {
-    color: var(--gold);
-    font-weight: 800;
-}
-.music-btn {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    border: 2px solid var(--primary);
-    background: transparent;
-    color: var(--primary);
-    font-size: 28px;
-    cursor: pointer;
-    margin: 30px auto;
-    box-shadow: 0 0 40px var(--primary);
-    transition: .3s;
-}
-.music-btn:hover {
-    background: var(--primary);
-    color: #000;
-    box-shadow: 0 0 70px var(--accent);
-}
-.buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 25px;
-    margin: 50px 0;
-}
-.btn {
-    padding: 18px;
-    border-radius: 25px;
-    background: var(--glass);
-    color: #fff;
-    font-weight: 800;
-    text-decoration: none;
-    box-shadow: 0 0 30px rgba(0,123,255,0.4);
-    transition: .4s;
-}
-.btn i { margin-left: 10px; color: var(--primary); }
-.btn:hover {
-    background: var(--primary);
-    color: #000;
-    transform: translateY(-8px) scale(1.05);
-}
-.btn:hover i { color: #000; }
-.bots-section {
-    margin-top: 60px;
-    padding: 40px;
-    border-radius: 35px;
-    background: var(--glass);
-}
-.bots-section h2 {
-    margin-bottom: 30px;
-    font-weight: 900;
-    color: var(--gold);
-}
-.bot-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 25px;
-    margin-top: 30px;
-}
-.bot-card {
-    padding: 25px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid var(--primary);
-    transition: .3s;
-}
-.bot-card:hover {
-    transform: scale(1.05);
-    border-color: var(--gold);
-    box-shadow: 0 0 30px var(--primary);
-}
-.bot-card .bot-icon { font-size: 3em; margin-bottom: 10px; }
-.bot-card .bot-name { font-weight: 800; font-size: 1.3em; }
-.bot-card .bot-version { color: #aaa; font-size: .9em; margin-top: 5px; }
-.bot-card .bot-desc { color: #888; font-size: .85em; margin-top: 8px; }
-.features-section {
-    margin-top: 60px;
-    padding: 40px;
-    border-radius: 35px;
-    background: var(--glass);
-}
-.features-section h2 {
-    margin-bottom: 30px;
-    font-weight: 900;
-    color: var(--neon);
-}
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-}
-.feature-item {
-    padding: 20px;
-    border-radius: 15px;
-    background: rgba(0,123,255,0.1);
-    border: 1px solid var(--accent);
-    transition: .3s;
-}
-.feature-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0 30px var(--accent);
-}
-.feature-item .feature-icon { font-size: 2.5em; margin-bottom: 10px; }
-.feature-item .feature-title { font-weight: 800; color: #fff; }
-.feature-item .feature-desc { color: #aaa; font-size: .9em; margin-top: 5px; }
-.stats-section {
-    margin-top: 60px;
-    padding: 40px;
-    border-radius: 35px;
-    background: var(--glass);
-}
-.stats-section h2 {
-    margin-bottom: 30px;
-    font-weight: 900;
-    color: var(--gold);
-}
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 20px;
-}
-.stat-item {
-    padding: 20px;
-    border-radius: 15px;
-    background: rgba(255,215,0,0.05);
-    border: 1px solid var(--gold);
-}
-.stat-item .stat-number {
-    font-size: 2.5em;
-    font-weight: 900;
-    color: var(--gold);
-}
-.stat-item .stat-label { color: #aaa; font-size: .9em; margin-top: 5px; }
-.skills {
-    margin-top: 60px;
-    padding: 40px;
-    border-radius: 35px;
-    background: var(--glass);
-}
-.skills h2 {
-    margin-bottom: 30px;
-    font-weight: 900;
-    color: var(--primary);
-}
-.skill-container { margin: 20px 0; }
-.skill-container .name {
-    display: block;
-    margin-bottom: 8px;
-    color: #fff;
-}
-.skill-bar {
-    height: 20px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 25px;
-    overflow: hidden;
-}
-.skill-bar span {
-    display: block;
-    height: 100%;
-    width: 0;
-    background: linear-gradient(90deg, var(--primary), var(--accent));
-    transition: 2s;
-}
-.footer {
-    margin-top: 80px;
-    padding: 30px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    color: #666;
-    font-size: .9em;
-}
-.footer .dev-name { color: var(--gold); font-weight: 800; }
-.footer .bot-name { color: var(--primary); }
-.footer .heart { color: red; }
-.channel-btn {
-    position: fixed;
-    bottom: 30px;
-    left: 30px;
-    padding: 18px 30px;
-    border-radius: 50px;
-    background: var(--primary);
-    color: #000;
-    font-weight: 800;
-    text-decoration: none;
-    box-shadow: 0 0 40px var(--accent);
-    z-index: 10;
-    transition: .3s;
-}
-.channel-btn:hover {
-    background: var(--accent);
-    box-shadow: 0 0 70px var(--accent);
-}
-</style>
-</head>
-<body>
-
-<video id="bg-video" autoplay muted loop playsinline>
-    <source src="https://files.catbox.moe/vtom19.mp4">
-</video>
-<canvas id="particles"></canvas>
-<audio id="music" src="https://files.catbox.moe/9fyuwb.m4a"></audio>
-
-<div id="content">
-
-    <div class="profile-pic">
-        <img src="https://i.pinimg.com/736x/aa/92/ec/aa92ece81384ea464c815b16c560b815.jpg" alt="GOJO">
-    </div>
-
-    <h1>𝐆𝐎𝐉𝐎 <span>𝐃𝐄𝐕𝐄𝐋𝐎𝐏𝐄𝐑</span></h1>
-
-    <div class="status-badge">
-        <i class="fas fa-circle" style="color:#00ff00;font-size:12px;margin-left:8px;"></i>
-        🔒 مشغول بالعمل
-    </div>
-
-    <p class="description">
-        🧑‍💻 مطور بوتات واتساب 🤖<br>
-        Full Stack Web | Bot Engineer<br>
-        <span class="highlight">✦ 𝐀𝐃𝐑𝐈𝐀𝐍 𝐁𝐎𝐓 ✦</span> &nbsp;|&nbsp; <span class="highlight">✦ 𝐌𝐈𝐋𝐄𝐒 𝐁𝐎𝐓 ✦</span> &nbsp;|&nbsp; <span class="highlight">✦ +225 أمر</span>
-    </p>
-
-    <button class="music-btn" id="musicBtn">
-        <i class="fas fa-play"></i>
-    </button>
-
-    <div class="buttons">
-        <a class="btn" href="https://github.com/Gojo-Elhalawany"><i class="fab fa-github"></i> GitHub</a>
-        <a class="btn" href="https://t.me/GOJO_ELHALAWANY"><i class="fab fa-telegram"></i> Telegram</a>
-        <a class="btn" href="https://wa.me/201015383185"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-    </div>
-
-    <div class="bots-section">
-        <h2>🤖 بوتاتي</h2>
-        <div class="bot-cards">
-            <div class="bot-card">
-                <div class="bot-icon">🕷️</div>
-                <div class="bot-name">𝐌𝐈𝐋𝐄𝐒 𝐁𝐎𝐓</div>
-                <div class="bot-version">v1.5</div>
-                <div class="bot-desc">⚡ سريع وخفيف</div>
-            </div>
-            <div class="bot-card">
-                <div class="bot-icon">⚡</div>
-                <div class="bot-name">𝐀𝐃𝐑𝐈𝐀𝐍 𝐁𝐎𝐓</div>
-                <div class="bot-version">v2.0</div>
-                <div class="bot-desc">🔥 قوي وموثوق</div>
-            </div>
-            <div class="bot-card">
-                <div class="bot-icon">📋</div>
-                <div class="bot-name">+225 أمر</div>
-                <div class="bot-version">متنوعة</div>
-                <div class="bot-desc">🎯 أوامر متعددة الأغراض</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="features-section">
-        <h2>✨ مميزات البوتات</h2>
-        <div class="features-grid">
-            <div class="feature-item">
-                <div class="feature-icon">🎮</div>
-                <div class="feature-title">ألعاب تفاعلية</div>
-                <div class="feature-desc">أكثر من 20 لعبة مسلية</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">🤖</div>
-                <div class="feature-title">ذكاء اصطناعي</div>
-                <div class="feature-desc">DeepSeek, ChatGPT</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">📥</div>
-                <div class="feature-title">تحميل من السوشيال</div>
-                <div class="feature-desc">يوتيوب، فيسبوك، تيك توك</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">🎨</div>
-                <div class="feature-title">زخارف وستيكرات</div>
-                <div class="feature-desc">أنماط زخرفة متعددة</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">🛡️</div>
-                <div class="feature-title">حماية الجروبات</div>
-                <div class="feature-desc">منع الروابط والإزعاج</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">📊</div>
-                <div class="feature-title">نظام النقاط</div>
-                <div class="feature-desc">مستويات ومكافآت</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="stats-section">
-        <h2>📊 إحصائيات</h2>
-        <div class="stats-grid">
-            <div class="stat-item">
-                <div class="stat-number" id="usersCount">0</div>
-                <div class="stat-label">👥 مستخدمين</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="groupsCount">0</div>
-                <div class="stat-label">👥 جروبات</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="commandsCount">0</div>
-                <div class="stat-label">⚙️ أوامر</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="uptime">0</div>
-                <div class="stat-label">⏱️ وقت التشغيل</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="skills">
-        <h2>🚀 المهارات</h2>
-        <div class="skill-container">
-            <span class="name">JavaScript (Node.js)</span>
-            <div class="skill-bar"><span data-width="90%"></span></div>
-        </div>
-        <div class="skill-container">
-            <span class="name">Baileys API</span>
-            <div class="skill-bar"><span data-width="85%"></span></div>
-        </div>
-        <div class="skill-container">
-            <span class="name">HTML & CSS</span>
-            <div class="skill-bar"><span data-width="75%"></span></div>
-        </div>
-        <div class="skill-container">
-            <span class="name">Python</span>
-            <div class="skill-bar"><span data-width="50%"></span></div>
-        </div>
-    </div>
-
-    <div class="footer">
-        <p>
-            <span class="dev-name">👑 المطور: 𝐆𝐎𝐉𝐎</span><br>
-            <span class="bot-name">✦ 𝐀𝐃𝐑𝐈𝐀𝐍 𝐁𝐎𝐓 ✦</span> &nbsp;|&nbsp; <span class="bot-name">✦ 𝐌𝐈𝐋𝐄𝐒 𝐁𝐎𝐓 ✦</span><br>
-            Made with <span class="heart">❤️</span> by 𝐆𝐎𝐉𝐎<br>
-            جميع الحقوق محفوظة © 2026
-        </p>
-    </div>
-
-</div>
-
-<a href="https://whatsapp.com/channel/0029VbD5ciE9Gv7WMTldg60J" class="channel-btn">
-    <i class="fab fa-whatsapp"></i> قناة ADRIAN
-</a>
-
-<script>
-const music = document.getElementById("music");
-const btn = document.getElementById("musicBtn");
-const icon = btn.querySelector("i");
-btn.onclick = () => {
-    if (music.paused) {
-        music.play();
-        icon.className = "fas fa-pause";
-    } else {
-        music.pause();
-        icon.className = "fas fa-play";
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbis.Nft</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Condiment&display=swap" rel="stylesheet" />
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            background: '#010828',
+            cream: '#EFF4FF',
+            neon: '#6FFF00',
+          },
+          fontFamily: {
+            grotesk: ['Anton', 'sans-serif'],
+            condiment: ['Condiment', 'cursive'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    /* Liquid Glass */
+    .liquid-glass {
+      background: rgba(255, 255, 255, 0.01);
+      background-blend-mode: luminosity;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: none;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
     }
-};
+    .liquid-glass::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1.4px;
+      background: linear-gradient(180deg,
+          rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 20%,
+          rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0) 60%,
+          rgba(255, 255, 255, 0.15) 80%, rgba(255, 255, 255, 0.45) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
 
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
-let particles = [];
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener("resize", resize);
+    /* Texture Overlay */
+    .texture-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      pointer-events: none;
+      background-image: url('/texture.png');
+      background-size: cover;
+      mix-blend-mode: lighten;
+      opacity: 0.6;
+    }
 
-for (let i = 0; i < 180; i++) {
-    particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 2,
-        s: Math.random() * 0.8
-    });
-}
+    /* Video object-fit */
+    .video-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .video-bg-contain {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
 
-(function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255,255,255,0.8)";
-        ctx.fill();
-        p.y += p.s;
-        if (p.y > canvas.height) { p.y = 0; p.x = Math.random() * canvas.width; }
-    });
-    requestAnimationFrame(animate);
-})();
+    /* Hero rounded bottom */
+    .hero-rounded {
+      border-bottom-left-radius: 32px;
+      border-bottom-right-radius: 32px;
+      overflow: hidden;
+    }
 
-document.querySelectorAll(".skill-bar span").forEach(e => setTimeout(() => e.style.width = e.dataset.width, 500));
+    /* CTA video container */
+    .cta-video-wrap {
+      position: relative;
+      width: 100%;
+    }
 
-document.addEventListener("DOMContentLoaded", function() {
-    const usersEl = document.getElementById('usersCount');
-    const groupsEl = document.getElementById('groupsCount');
-    const commandsEl = document.getElementById('commandsCount');
-    const uptimeEl = document.getElementById('uptime');
+    /* Custom responsive utilities */
+    .text-40 { font-size: 40px; }
+    .text-60 { font-size: 60px; }
+    .text-75 { font-size: 75px; }
+    .text-90 { font-size: 90px; }
 
-    let users = 0, groups = 0, commands = 0, uptime = 0;
-    const usersTarget = 1250, groupsTarget = 45, commandsTarget = 120;
+    .text-32 { font-size: 32px; }
+    .text-48 { font-size: 48px; }
 
-    const interval = setInterval(() => {
-        if (users < usersTarget) users += Math.ceil((usersTarget - users) / 20);
-        if (groups < groupsTarget) groups += Math.ceil((groupsTarget - groups) / 20);
-        if (commands < commandsTarget) commands += Math.ceil((commandsTarget - commands) / 20);
-        uptime += 1;
-        usersEl.textContent = users;
-        groupsEl.textContent = groups;
-        commandsEl.textContent = commands;
-        uptimeEl.textContent = uptime + 's';
-        if (users >= usersTarget && groups >= groupsTarget && commands >= commandsTarget) {
-            clearInterval(interval);
-        }
-    }, 100);
-});
-</script>
+    .text-17 { font-size: 17px; }
+    .text-68 { font-size: 68px; }
+
+    .text-36 { font-size: 36px; }
+
+    @media (min-width: 640px) {
+      .sm\:text-60 { font-size: 60px; }
+      .sm\:text-48 { font-size: 48px; }
+    }
+    @media (min-width: 768px) {
+      .md\:text-75 { font-size: 75px; }
+      .md\:text-60 { font-size: 60px; }
+      .md\:text-36 { font-size: 36px; }
+    }
+    @media (min-width: 1024px) {
+      .lg\:text-90 { font-size: 90px; }
+      .lg\:text-48 { font-size: 48px; }
+      .lg\:text-68 { font-size: 68px; }
+      .lg\:text-36 { font-size: 36px; }
+    }
+
+    /* Card video container */
+    .card-video-wrap {
+      position: relative;
+      padding-bottom: 100%;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+    .card-video-wrap video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* CTA button responsive sizes */
+    .cta-btn-w { width: 14vw; }
+    .cta-btn-h { height: 14vw; }
+    @media (min-width: 640px) {
+      .cta-btn-w { width: 14.375rem; }
+      .cta-btn-h { height: 14.375rem; }
+    }
+    @media (min-width: 768px) {
+      .cta-btn-w { width: 10.78125rem; }
+      .cta-btn-h { height: 10.78125rem; }
+    }
+    @media (min-width: 1024px) {
+      .cta-btn-w { width: 16.77rem; }
+      .cta-btn-h { height: 16.77rem; }
+    }
+  </style>
+</head>
+<body class="bg-background text-cream font-mono antialiased">
+
+  <!-- Texture Overlay -->
+  <div class="texture-overlay"></div>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 1: HERO (Full viewport) -->
+  <!-- ============================================================ -->
+  <section class="relative h-screen hero-rounded">
+    <!-- Background Video -->
+    <video class="video-bg" autoPlay loop muted playsInline>
+      <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_045634_e1c98c76-1265-4f5c-882a-4276f2080894.mp4" type="video/mp4" />
+    </video>
+    <!-- Overlay gradient -->
+    <div class="absolute inset-0 bg-black/30"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 flex flex-col h-full max-w-[1831px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+      <!-- Nav -->
+      <div class="flex items-center justify-between pt-4">
+        <!-- Logo Left -->
+        <div class="font-grotesk text-[16px] uppercase tracking-wide text-cream">
+          Orbis.Nft
+        </div>
+
+        <!-- Center Nav (hidden on mobile) -->
+        <div class="hidden lg:block liquid-glass rounded-[28px] px-[52px] py-[24px]">
+          <ul class="flex gap-8 font-grotesk text-[13px] uppercase text-cream">
+            <li><a href="#" class="hover:text-neon transition">Homepage</a></li>
+            <li><a href="#" class="hover:text-neon transition">Gallery</a></li>
+            <li><a href="#" class="hover:text-neon transition">Buy NFT</a></li>
+            <li><a href="#" class="hover:text-neon transition">FAQ</a></li>
+            <li><a href="#" class="hover:text-neon transition">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Desktop Social Icons (top-right) -->
+        <div class="hidden lg:flex flex-col gap-2">
+          <button class="liquid-glass rounded-[1rem] w-14 h-14 flex items-center justify-center hover:bg-white/10 transition">
+            <i data-lucide="mail" class="w-5 h-5 text-cream"></i>
+          </button>
+          <button class="liquid-glass rounded-[1rem] w-14 h-14 flex items-center justify-center hover:bg-white/10 transition">
+            <i data-lucide="twitter" class="w-5 h-5 text-cream"></i>
+          </button>
+          <button class="liquid-glass rounded-[1rem] w-14 h-14 flex items-center justify-center hover:bg-white/10 transition">
+            <i data-lucide="github" class="w-5 h-5 text-cream"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Hero Content (centered) -->
+      <div class="flex-1 flex flex-col justify-center">
+        <div class="relative max-w-[780px] lg:ml-32">
+          <!-- Heading -->
+          <h1 class="font-grotesk uppercase leading-[1.05] sm:leading-[1] text-40 sm:text-60 md:text-75 lg:text-90">
+            Beyond earth<br />
+            and ( its ) familiar boundaries
+          </h1>
+
+          <!-- Cursive accent (absolute, right side) -->
+          <div class="absolute -right-8 top-4 sm:-right-12 md:-right-16 lg:-right-20 -rotate-1 mix-blend-exclusion opacity-90">
+            <span class="font-condiment text-neon text-32 sm:text-48 lg:text-48 normal-case">
+              Nft collection
+            </span>
+          </div>
+        </div>
+
+        <!-- Mobile Social Icons (centered below heading) -->
+        <div class="flex lg:hidden justify-center gap-3 mt-8">
+          <button class="liquid-glass rounded-[1rem] w-14 h-14 flex items-center justify-center hover:bg-white/10 transition">
+            <i data-lucide="mail" class="w-5 h-5 text-cream"></i>
+          </button>
+          <button class="liquid-glass rounded-[1rem] w-14 h-14 flex items-center justify-center hover:bg-white/10 transition">
+            <i data-lucide="twitter" class="w-5 h-5 text-cream"></i>
+          </button>
+          <button class="liquid-glass rounded-[1rem] w-14 h-14 flex items-center justify-center hover:bg-white/10 transition">
+            <i data-lucide="github" class="w-5 h-5 text-cream"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 2: ABOUT / INTRO -->
+  <!-- ============================================================ -->
+  <section class="relative h-screen">
+    <!-- Background Video -->
+    <video class="video-bg" autoPlay loop muted playsInline>
+      <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_151551_992053d1-3d3e-4b8c-abac-45f22158f411.mp4" type="video/mp4" />
+    </video>
+    <div class="absolute inset-0 bg-black/30"></div>
+
+    <div class="relative z-10 max-w-[1831px] mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 lg:py-24 h-full flex flex-col justify-center">
+      <!-- Top Row -->
+      <div class="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-8">
+        <!-- Left: Heading -->
+        <div class="relative">
+          <h2 class="font-grotesk uppercase text-32 sm:text-48 md:text-60">
+            Hello!<br />
+            I'm orbis
+          </h2>
+          <!-- Cursive accent -->
+          <div class="absolute -bottom-4 right-0 md:-bottom-6 lg:-bottom-8 -rotate-1 mix-blend-exclusion">
+            <span class="font-condiment text-neon text-36 sm:text-48 md:text-68 normal-case">
+              Orbis
+            </span>
+          </div>
+        </div>
+
+        <!-- Right: Short paragraph -->
+        <div class="max-w-[266px] text-sm sm:text-base uppercase font-mono text-cream">
+          A digital object fixed beyond time and place. An exploration of distance, form, and silence in space
+        </div>
+      </div>
+
+      <!-- Bottom Row (2 columns, decorative text at opacity-10) -->
+      <div class="flex flex-col lg:flex-row gap-8 mt-12 lg:mt-16">
+        <!-- Left Column -->
+        <div class="flex-1 text-[#010828] lg:text-cream/10 text-sm sm:text-base uppercase font-mono">
+          <p>A digital object fixed beyond time and place.</p>
+          <p>An exploration of distance, form, and silence in space</p>
+        </div>
+        <!-- Right Column (hidden below lg) -->
+        <div class="hidden lg:block flex-1 text-cream/10 text-sm sm:text-base uppercase font-mono">
+          <p>A digital object fixed beyond time and place.</p>
+          <p>An exploration of distance, form, and silence in space</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 3: NFT COLLECTION GRID -->
+  <!-- ============================================================ -->
+  <section class="py-16 md:py-20 lg:py-24 bg-background">
+    <div class="max-w-[1831px] mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Header Row -->
+      <div class="flex flex-col lg:flex-row lg:justify-between lg:items-end gap-6 mb-12">
+        <!-- Left Heading -->
+        <div>
+          <h2 class="font-grotesk uppercase text-32 sm:text-48 md:text-60 leading-[1.1]">
+            Collection of
+            <br />
+            <span class="ml-12 sm:ml-24 lg:ml-32 flex items-center gap-2">
+              <span class="font-condiment text-neon normal-case">Space</span>
+              <span class="font-grotesk">objects</span>
+            </span>
+          </h2>
+        </div>
+
+        <!-- Right: SEE ALL CREATORS button -->
+        <div class="flex flex-col items-end">
+          <div class="flex items-end gap-1">
+            <span class="font-grotesk text-32 sm:text-48 md:text-60 leading-none">SEE</span>
+            <div class="flex flex-col leading-[1.1]">
+              <span class="font-grotesk text-20 sm:text-28 md:text-36">ALL</span>
+              <span class="font-grotesk text-20 sm:text-28 md:text-36">CREATORS</span>
+            </div>
+          </div>
+          <div class="w-full bg-neon h-[6px] md:h-[8px] lg:h-[10px] mt-1"></div>
+        </div>
+      </div>
+
+      <!-- NFT Card Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- CARD 1 -->
+        <div class="liquid-glass rounded-[32px] p-[18px] hover:bg-white/10 transition">
+          <div class="card-video-wrap">
+            <video autoPlay loop muted playsInline>
+              <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_053923_22c0a6a5-313c-474c-85ff-3b50d25e944a.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <!-- Overlay bar -->
+          <div class="flex items-center justify-between mt-3 liquid-glass rounded-[20px] px-5 py-4">
+            <div>
+              <div class="text-[11px] uppercase text-cream/70 font-mono">RARITY SCORE:</div>
+              <div class="text-[16px] font-mono text-cream">8.7/10</div>
+            </div>
+            <!-- Purple gradient button -->
+            <button class="w-12 h-12 rounded-full bg-gradient-to-br from-[#b724ff] to-[#7c3aed] shadow-lg shadow-purple-500/50 hover:scale-110 transition flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="liquid-glass rounded-[32px] p-[18px] hover:bg-white/10 transition">
+          <div class="card-video-wrap">
+            <video autoPlay loop muted playsInline>
+              <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_054411_511c1b7a-fb2f-42ef-bf6c-32c0b1a06e79.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div class="flex items-center justify-between mt-3 liquid-glass rounded-[20px] px-5 py-4">
+            <div>
+              <div class="text-[11px] uppercase text-cream/70 font-mono">RARITY SCORE:</div>
+              <div class="text-[16px] font-mono text-cream">9/10</div>
+            </div>
+            <button class="w-12 h-12 rounded-full bg-gradient-to-br from-[#b724ff] to-[#7c3aed] shadow-lg shadow-purple-500/50 hover:scale-110 transition flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="liquid-glass rounded-[32px] p-[18px] hover:bg-white/10 transition">
+          <div class="card-video-wrap">
+            <video autoPlay loop muted playsInline>
+              <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_055427_ac7035b5-9f3b-4289-86fc-941b2432317d.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div class="flex items-center justify-between mt-3 liquid-glass rounded-[20px] px-5 py-4">
+            <div>
+              <div class="text-[11px] uppercase text-cream/70 font-mono">RARITY SCORE:</div>
+              <div class="text-[16px] font-mono text-cream">8.2/10</div>
+            </div>
+            <button class="w-12 h-12 rounded-full bg-gradient-to-br from-[#b724ff] to-[#7c3aed] shadow-lg shadow-purple-500/50 hover:scale-110 transition flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 4: CTA / FINAL SECTION -->
+  <!-- ============================================================ -->
+  <section class="relative w-full bg-background">
+    <!-- Video (native aspect ratio) -->
+    <div class="cta-video-wrap">
+      <video class="w-full h-auto block" autoPlay loop muted playsInline>
+        <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_055729_72d66327-b59e-4ae9-bb70-de6ccb5ecdb0.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <!-- Overlay Content -->
+    <div class="absolute inset-0 flex flex-col items-start justify-center px-4 sm:px-6 lg:px-8">
+      <div class="max-w-[1831px] mx-auto w-full h-full flex flex-col justify-center">
+        <!-- Text Block (right-aligned) -->
+        <div class="relative self-end w-full lg:pr-[20%] lg:pl-[15%]">
+          <!-- Cursive accent (top-left) -->
+          <div class="absolute -top-4 lg:-top-8 left-0 mix-blend-exclusion">
+            <span class="font-condiment text-neon text-17 sm:text-36 md:text-48 lg:text-68 normal-case">
+              Go beyond
+            </span>
+          </div>
+
+          <!-- Heading -->
+          <div class="font-grotesk uppercase text-right leading-[1.1] text-16 sm:text-32 md:text-48 lg:text-60">
+            <p class="mb-4 sm:mb-8 lg:mb-12">JOIN US.</p>
+            <p>REVEAL WHAT'S HIDDEN.</p>
+            <p>DEFINE WHAT'S NEXT.</p>
+            <p>FOLLOW THE SIGNAL.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Icons (Bottom-left) -->
+    <div class="absolute left-[8%] bottom-[12%] sm:bottom-[15%] lg:bottom-[20%]">
+      <div class="liquid-glass rounded-[0.5rem] sm:rounded-[0.75rem] md:rounded-[1rem] lg:rounded-[1.25rem] flex flex-col divide-y divide-white/10">
+        <button class="cta-btn-w cta-btn-h flex items-center justify-center hover:bg-white/10 transition">
+          <i data-lucide="mail" class="w-6 h-6 lg:w-8 lg:h-8 text-cream"></i>
+        </button>
+        <button class="cta-btn-w cta-btn-h flex items-center justify-center hover:bg-white/10 transition">
+          <i data-lucide="twitter" class="w-6 h-6 lg:w-8 lg:h-8 text-cream"></i>
+        </button>
+        <button class="cta-btn-w cta-btn-h flex items-center justify-center hover:bg-white/10 transition">
+          <i data-lucide="github" class="w-6 h-6 lg:w-8 lg:h-8 text-cream"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Init Lucide Icons -->
+  <script>
+    lucide.createIcons();
+  </script>
 </body>
 </html>
