@@ -3,447 +3,246 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Orbis.Nft</title>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Condiment&display=swap" rel="stylesheet" />
-  <!-- Lucide Icons -->
+  <title>Bloom</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&display=swap" rel="stylesheet" />
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            background: '#010828',
-            cream: '#EFF4FF',
-            neon: '#6FFF00',
-          },
-          fontFamily: {
-            grotesk: ['Anton', 'sans-serif'],
-            condiment: ['Condiment', 'cursive'],
-          },
-        },
-      },
-    };
-  </script>
   <style>
-    /* Liquid Glass */
-    .liquid-glass {
-      background: rgba(255, 255, 255, 0.01);
-      background-blend-mode: luminosity;
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      border: none;
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
-      position: relative;
-      overflow: hidden;
+    @layer components {
+      .liquid-glass {
+        background: rgba(255, 255, 255, 0.01);
+        background-blend-mode: luminosity;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        border: none;
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+      .liquid-glass::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1.4px;
+        background: linear-gradient(180deg,
+            rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 20%,
+            transparent 40%, transparent 60%,
+            rgba(255, 255, 255, 0.15) 80%, rgba(255, 255, 255, 0.45) 100%);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+      }
+      .liquid-glass-strong {
+        background: rgba(255, 255, 255, 0.01);
+        background-blend-mode: luminosity;
+        backdrop-filter: blur(50px);
+        -webkit-backdrop-filter: blur(50px);
+        border: none;
+        box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+        position: relative;
+        overflow: hidden;
+      }
+      .liquid-glass-strong::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1.4px;
+        background: linear-gradient(180deg,
+            rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.2) 20%,
+            transparent 40%, transparent 60%,
+            rgba(255, 255, 255, 0.2) 80%, rgba(255, 255, 255, 0.5) 100%);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+      }
     }
-    .liquid-glass::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      padding: 1.4px;
-      background: linear-gradient(180deg,
-          rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 20%,
-          rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0) 60%,
-          rgba(255, 255, 255, 0.15) 80%, rgba(255, 255, 255, 0.45) 100%);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
-    }
-
-    /* Texture Overlay */
-    .texture-overlay {
+    .video-bg {
       position: fixed;
       inset: 0;
-      z-index: 50;
-      pointer-events: none;
-      background-image: url('/texture.png');
-      background-size: cover;
-      mix-blend-mode: lighten;
-      opacity: 0.6;
-    }
-
-    /* Video object-fit */
-    .video-bg {
-      position: absolute;
-      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      z-index: 0;
     }
-    .video-bg-contain {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-
-    /* Hero rounded bottom */
-    .hero-rounded {
-      border-bottom-left-radius: 32px;
-      border-bottom-right-radius: 32px;
-      overflow: hidden;
-    }
-
-    /* CTA video container */
-    .cta-video-wrap {
+    .content {
       position: relative;
-      width: 100%;
+      z-index: 10;
     }
-
-    /* Custom responsive utilities */
-    .text-40 { font-size: 40px; }
-    .text-60 { font-size: 60px; }
-    .text-75 { font-size: 75px; }
-    .text-90 { font-size: 90px; }
-
-    .text-32 { font-size: 32px; }
-    .text-48 { font-size: 48px; }
-
-    .text-17 { font-size: 17px; }
-    .text-68 { font-size: 68px; }
-
-    .text-36 { font-size: 36px; }
-
-    @media (min-width: 640px) {
-      .sm\:text-60 { font-size: 60px; }
-      .sm\:text-48 { font-size: 48px; }
+    .icon-btn {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
     }
-    @media (min-width: 768px) {
-      .md\:text-75 { font-size: 75px; }
-      .md\:text-60 { font-size: 60px; }
-      .md\:text-36 { font-size: 36px; }
+    .icon-btn:hover {
+      transform: scale(1.05);
+      background: rgba(255, 255, 255, 0.2);
     }
-    @media (min-width: 1024px) {
-      .lg\:text-90 { font-size: 90px; }
-      .lg\:text-48 { font-size: 48px; }
-      .lg\:text-68 { font-size: 68px; }
-      .lg\:text-36 { font-size: 36px; }
+    .hover-scale {
+      transition: transform 0.2s;
     }
-
-    /* Card video container */
-    .card-video-wrap {
-      position: relative;
-      padding-bottom: 100%;
-      border-radius: 24px;
-      overflow: hidden;
-    }
-    .card-video-wrap video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* CTA button responsive sizes */
-    .cta-btn-w { width: 14vw; }
-    .cta-btn-h { height: 14vw; }
-    @media (min-width: 640px) {
-      .cta-btn-w { width: 14.375rem; }
-      .cta-btn-h { height: 14.375rem; }
-    }
-    @media (min-width: 768px) {
-      .cta-btn-w { width: 10.78125rem; }
-      .cta-btn-h { height: 10.78125rem; }
-    }
-    @media (min-width: 1024px) {
-      .cta-btn-w { width: 16.77rem; }
-      .cta-btn-h { height: 16.77rem; }
+    .hover-scale:hover {
+      transform: scale(1.05);
     }
   </style>
 </head>
-<body class="bg-background text-cream font-mono antialiased">
+<body class="font-poppins text-white">
 
-  <!-- Texture Overlay -->
-  <div class="texture-overlay"></div>
+<!-- Video Background -->
+<video class="video-bg" autoplay loop muted playsinline>
+  <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260315_073750_51473149-4350-4920-ae24-c8214286f323.mp4" type="video/mp4" />
+</video>
 
-  <!-- ============================================================ -->
-  <!-- SECTION 1: HERO (Full viewport) -->
-  <!-- ============================================================ -->
-  <section class="relative h-screen hero-rounded">
-    <!-- Background Video -->
-    <video class="video-bg" autoPlay loop muted playsInline>
-      <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_045634_e1c98c76-1265-4f5c-882a-4276f2080894.mp4" type="video/mp4" />
-    </video>
-    <!-- Overlay gradient -->
-    <div class="absolute inset-0 bg-black/30"></div>
+<!-- Main Content -->
+<div class="content min-h-screen flex items-center">
 
-    <!-- Content -->
-    <div class="relative z-10 flex flex-col h-full max-w-[1831px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <!-- Flex Row -->
+  <div class="flex flex-col lg:flex-row w-full min-h-screen">
 
-      <!-- Nav -->
-      <div class="flex items-center justify-between pt-4">
-        <!-- Logo Left -->
-        <div class="font-grotesk text-[16px] uppercase tracking-wide text-cream">
-          Orbis.Nft
-        </div>
+    <!-- LEFT PANEL (52%) -->
+    <div class="lg:w-[52%] w-full flex items-center justify-center p-4 lg:p-6 relative min-h-[60vh] lg:min-h-screen">
+      <!-- Glass overlay -->
+      <div class="liquid-glass-strong absolute inset-4 lg:inset-6 rounded-3xl"></div>
 
-        <!-- Center Nav (hidden on mobile) -->
-        <div class="hidden lg:block liquid-glass rounded-[28px] px-[52px] py-[24px]">
-          <ul class="flex gap-8 font-grotesk text-[13px] uppercase text-cream">
-            <li><a href="#" class="hover:text-neon transition">Homepage</a></li>
-            <li><a href="#" class="hover:text-neon transition">Gallery</a></li>
-            <li><a href="#" class="hover:text-neon transition">Buy NFT</a></li>
-            <li><a href="#" class="hover:text-neon transition">FAQ</a></li>
-            <li><a href="#" class="hover:text-neon transition">Contact</a></li>
-          </ul>
-        </div>
+      <!-- Content -->
+      <div class="relative z-10 w-full max-w-xl mx-auto flex flex-col min-h-[calc(100vh-4rem)] lg:min-h-[calc(100vh-6rem)] px-4 py-6">
 
-        <!-- Desktop Social Icons (top-right) -->
-        <div class="hidden lg:flex flex-col gap-2">
-          <button class="liquid-glass rounded-[1rem] w-14 h-14 flex items-center justify-center hover:bg-white/10 transition">
-            <i data-lucide="mail" class="w-5 h-5 text-cream"></i>
-          </button>
-          <button class="liquid-glass rounded-[1rem] w-14 h-14 flex items-center justify-center hover:bg-white/10 transition">
-            <i data-lucide="twitter" class="w-5 h-5 text-cream"></i>
-          </button>
-          <button class="liquid-glass rounded-[1rem] w-14 h-14 flex items-center justify-center hover:bg-white/10 transition">
-            <i data-lucide="github" class="w-5 h-5 text-cream"></i>
+        <!-- Nav -->
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <img src="/logo.png" alt="Bloom" width="32" height="32" class="w-8 h-8" />
+            <span class="font-poppins font-semibold text-2xl tracking-tighter text-white">bloom</span>
+          </div>
+          <button class="liquid-glass rounded-full px-4 py-2 flex items-center gap-2 text-sm hover-scale">
+            <span>Menu</span>
+            <i data-lucide="menu" class="w-4 h-4"></i>
           </button>
         </div>
-      </div>
 
-      <!-- Hero Content (centered) -->
-      <div class="flex-1 flex flex-col justify-center">
-        <div class="relative max-w-[780px] lg:ml-32">
+        <!-- Hero Center (flex-1) -->
+        <div class="flex-1 flex flex-col justify-center items-center text-center lg:text-left lg:items-start gap-6 py-8">
+          <!-- Logo (80x80) -->
+          <img src="/logo.png" alt="Bloom" width="80" height="80" class="w-20 h-20" />
+
           <!-- Heading -->
-          <h1 class="font-grotesk uppercase leading-[1.05] sm:leading-[1] text-40 sm:text-60 md:text-75 lg:text-90">
-            Beyond earth<br />
-            and ( its ) familiar boundaries
+          <h1 class="text-5xl sm:text-6xl lg:text-7xl font-poppins font-medium tracking-[-0.05em] text-white leading-[1.1]">
+            Innovating the<br />
+            <span class="font-serif italic text-white/80">spirit of bloom</span>
+            <br />AI
           </h1>
 
-          <!-- Cursive accent (absolute, right side) -->
-          <div class="absolute -right-8 top-4 sm:-right-12 md:-right-16 lg:-right-20 -rotate-1 mix-blend-exclusion opacity-90">
-            <span class="font-condiment text-neon text-32 sm:text-48 lg:text-48 normal-case">
-              Nft collection
+          <!-- CTA Button -->
+          <button class="liquid-glass-strong rounded-full px-8 py-4 flex items-center gap-3 hover-scale active:scale-95">
+            <span class="font-medium">Explore Now</span>
+            <span class="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center">
+              <i data-lucide="download" class="w-4 h-4"></i>
             </span>
-          </div>
-        </div>
-
-        <!-- Mobile Social Icons (centered below heading) -->
-        <div class="flex lg:hidden justify-center gap-3 mt-8">
-          <button class="liquid-glass rounded-[1rem] w-14 h-14 flex items-center justify-center hover:bg-white/10 transition">
-            <i data-lucide="mail" class="w-5 h-5 text-cream"></i>
           </button>
-          <button class="liquid-glass rounded-[1rem] w-14 h-14 flex items-center justify-center hover:bg-white/10 transition">
-            <i data-lucide="twitter" class="w-5 h-5 text-cream"></i>
+
+          <!-- Three Pills -->
+          <div class="flex flex-wrap justify-center lg:justify-start gap-3">
+            <span class="liquid-glass rounded-full px-4 py-2 text-xs text-white/80">Artistic Gallery</span>
+            <span class="liquid-glass rounded-full px-4 py-2 text-xs text-white/80">AI Generation</span>
+            <span class="liquid-glass rounded-full px-4 py-2 text-xs text-white/80">3D Structures</span>
+          </div>
+
+          <!-- Bottom Quote -->
+          <div class="mt-4 text-center lg:text-left">
+            <div class="text-xs tracking-widest uppercase text-white/50 mb-2">VISIONARY DESIGN</div>
+            <div class="text-sm text-white/80 max-w-md">
+              <span class="font-poppins">We imagined a realm</span>
+              <span class="font-serif italic text-white/60"> with no ending.</span>
+            </div>
+            <div class="flex items-center gap-4 mt-3 justify-center lg:justify-start">
+              <span class="h-px w-8 bg-white/20"></span>
+              <span class="text-xs text-white/60 tracking-widest">MARCUS AURELIO</span>
+              <span class="h-px w-8 bg-white/20"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL (48%) — Desktop only -->
+    <div class="hidden lg:flex lg:w-[48%] items-center justify-center p-6 relative min-h-screen">
+      <div class="w-full max-w-md mx-auto flex flex-col gap-6 h-full justify-center py-8">
+
+        <!-- Top Bar: Social Icons + Account -->
+        <div class="flex items-center justify-between">
+          <div class="liquid-glass rounded-full px-4 py-2 flex items-center gap-3">
+            <a href="#" class="text-white hover:text-white/80 transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+            <a href="#" class="text-white hover:text-white/80 transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+            <a href="#" class="text-white hover:text-white/80 transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+            <span class="w-px h-4 bg-white/20"></span>
+            <i data-lucide="arrow-right" class="w-4 h-4 text-white/60"></i>
+          </div>
+          <button class="liquid-glass rounded-full px-4 py-2 flex items-center gap-2 hover-scale">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span class="text-sm">Account</span>
           </button>
-          <button class="liquid-glass rounded-[1rem] w-14 h-14 flex items-center justify-center hover:bg-white/10 transition">
-            <i data-lucide="github" class="w-5 h-5 text-cream"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================ -->
-  <!-- SECTION 2: ABOUT / INTRO -->
-  <!-- ============================================================ -->
-  <section class="relative h-screen">
-    <!-- Background Video -->
-    <video class="video-bg" autoPlay loop muted playsInline>
-      <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_151551_992053d1-3d3e-4b8c-abac-45f22158f411.mp4" type="video/mp4" />
-    </video>
-    <div class="absolute inset-0 bg-black/30"></div>
-
-    <div class="relative z-10 max-w-[1831px] mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 lg:py-24 h-full flex flex-col justify-center">
-      <!-- Top Row -->
-      <div class="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-8">
-        <!-- Left: Heading -->
-        <div class="relative">
-          <h2 class="font-grotesk uppercase text-32 sm:text-48 md:text-60">
-            Hello!<br />
-            I'm orbis
-          </h2>
-          <!-- Cursive accent -->
-          <div class="absolute -bottom-4 right-0 md:-bottom-6 lg:-bottom-8 -rotate-1 mix-blend-exclusion">
-            <span class="font-condiment text-neon text-36 sm:text-48 md:text-68 normal-case">
-              Orbis
-            </span>
-          </div>
         </div>
 
-        <!-- Right: Short paragraph -->
-        <div class="max-w-[266px] text-sm sm:text-base uppercase font-mono text-cream">
-          A digital object fixed beyond time and place. An exploration of distance, form, and silence in space
-        </div>
-      </div>
-
-      <!-- Bottom Row (2 columns, decorative text at opacity-10) -->
-      <div class="flex flex-col lg:flex-row gap-8 mt-12 lg:mt-16">
-        <!-- Left Column -->
-        <div class="flex-1 text-[#010828] lg:text-cream/10 text-sm sm:text-base uppercase font-mono">
-          <p>A digital object fixed beyond time and place.</p>
-          <p>An exploration of distance, form, and silence in space</p>
-        </div>
-        <!-- Right Column (hidden below lg) -->
-        <div class="hidden lg:block flex-1 text-cream/10 text-sm sm:text-base uppercase font-mono">
-          <p>A digital object fixed beyond time and place.</p>
-          <p>An exploration of distance, form, and silence in space</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================ -->
-  <!-- SECTION 3: NFT COLLECTION GRID -->
-  <!-- ============================================================ -->
-  <section class="py-16 md:py-20 lg:py-24 bg-background">
-    <div class="max-w-[1831px] mx-auto px-4 sm:px-6 lg:px-8">
-
-      <!-- Header Row -->
-      <div class="flex flex-col lg:flex-row lg:justify-between lg:items-end gap-6 mb-12">
-        <!-- Left Heading -->
-        <div>
-          <h2 class="font-grotesk uppercase text-32 sm:text-48 md:text-60 leading-[1.1]">
-            Collection of
-            <br />
-            <span class="ml-12 sm:ml-24 lg:ml-32 flex items-center gap-2">
-              <span class="font-condiment text-neon normal-case">Space</span>
-              <span class="font-grotesk">objects</span>
-            </span>
-          </h2>
+        <!-- Community Card -->
+        <div class="liquid-glass rounded-2xl p-6 w-56">
+          <h3 class="font-medium text-sm mb-1">Enter our ecosystem</h3>
+          <p class="text-xs text-white/60">Join the bloom community and explore AI-powered floral design.</p>
         </div>
 
-        <!-- Right: SEE ALL CREATORS button -->
-        <div class="flex flex-col items-end">
-          <div class="flex items-end gap-1">
-            <span class="font-grotesk text-32 sm:text-48 md:text-60 leading-none">SEE</span>
-            <div class="flex flex-col leading-[1.1]">
-              <span class="font-grotesk text-20 sm:text-28 md:text-36">ALL</span>
-              <span class="font-grotesk text-20 sm:text-28 md:text-36">CREATORS</span>
+        <!-- Bottom Feature Section (mt-auto) -->
+        <div class="mt-auto">
+          <div class="liquid-glass rounded-[2.5rem] p-6">
+            <div class="grid grid-cols-2 gap-4">
+              <!-- Processing Card -->
+              <div class="liquid-glass rounded-3xl p-4 text-center hover-scale">
+                <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-2">
+                  <i data-lucide="wand-2" class="w-4 h-4"></i>
+                </div>
+                <div class="text-xs font-medium">Processing</div>
+              </div>
+              <!-- Growth Archive Card -->
+              <div class="liquid-glass rounded-3xl p-4 text-center hover-scale">
+                <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-2">
+                  <i data-lucide="book-open" class="w-4 h-4"></i>
+                </div>
+                <div class="text-xs font-medium">Growth Archive</div>
+              </div>
+            </div>
+
+            <!-- Bottom Card: Flower Image -->
+            <div class="liquid-glass rounded-3xl p-4 flex items-center gap-4 mt-4 hover-scale">
+              <img src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=96&h=64&fit=crop" alt="Flower" class="w-24 h-16 rounded-2xl object-cover" />
+              <div class="flex-1">
+                <div class="text-sm font-medium">Advanced Plant Sculpting</div>
+                <div class="text-xs text-white/60">AI-driven floral design</div>
+              </div>
+              <button class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
+                <span class="text-lg font-light">+</span>
+              </button>
             </div>
           </div>
-          <div class="w-full bg-neon h-[6px] md:h-[8px] lg:h-[10px] mt-1"></div>
-        </div>
-      </div>
-
-      <!-- NFT Card Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        <!-- CARD 1 -->
-        <div class="liquid-glass rounded-[32px] p-[18px] hover:bg-white/10 transition">
-          <div class="card-video-wrap">
-            <video autoPlay loop muted playsInline>
-              <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_053923_22c0a6a5-313c-474c-85ff-3b50d25e944a.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <!-- Overlay bar -->
-          <div class="flex items-center justify-between mt-3 liquid-glass rounded-[20px] px-5 py-4">
-            <div>
-              <div class="text-[11px] uppercase text-cream/70 font-mono">RARITY SCORE:</div>
-              <div class="text-[16px] font-mono text-cream">8.7/10</div>
-            </div>
-            <!-- Purple gradient button -->
-            <button class="w-12 h-12 rounded-full bg-gradient-to-br from-[#b724ff] to-[#7c3aed] shadow-lg shadow-purple-500/50 hover:scale-110 transition flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>
-          </div>
         </div>
 
-        <!-- CARD 2 -->
-        <div class="liquid-glass rounded-[32px] p-[18px] hover:bg-white/10 transition">
-          <div class="card-video-wrap">
-            <video autoPlay loop muted playsInline>
-              <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_054411_511c1b7a-fb2f-42ef-bf6c-32c0b1a06e79.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <div class="flex items-center justify-between mt-3 liquid-glass rounded-[20px] px-5 py-4">
-            <div>
-              <div class="text-[11px] uppercase text-cream/70 font-mono">RARITY SCORE:</div>
-              <div class="text-[16px] font-mono text-cream">9/10</div>
-            </div>
-            <button class="w-12 h-12 rounded-full bg-gradient-to-br from-[#b724ff] to-[#7c3aed] shadow-lg shadow-purple-500/50 hover:scale-110 transition flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <!-- CARD 3 -->
-        <div class="liquid-glass rounded-[32px] p-[18px] hover:bg-white/10 transition">
-          <div class="card-video-wrap">
-            <video autoPlay loop muted playsInline>
-              <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_055427_ac7035b5-9f3b-4289-86fc-941b2432317d.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <div class="flex items-center justify-between mt-3 liquid-glass rounded-[20px] px-5 py-4">
-            <div>
-              <div class="text-[11px] uppercase text-cream/70 font-mono">RARITY SCORE:</div>
-              <div class="text-[16px] font-mono text-cream">8.2/10</div>
-            </div>
-            <button class="w-12 h-12 rounded-full bg-gradient-to-br from-[#b724ff] to-[#7c3aed] shadow-lg shadow-purple-500/50 hover:scale-110 transition flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================ -->
-  <!-- SECTION 4: CTA / FINAL SECTION -->
-  <!-- ============================================================ -->
-  <section class="relative w-full bg-background">
-    <!-- Video (native aspect ratio) -->
-    <div class="cta-video-wrap">
-      <video class="w-full h-auto block" autoPlay loop muted playsInline>
-        <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_055729_72d66327-b59e-4ae9-bb70-de6ccb5ecdb0.mp4" type="video/mp4" />
-      </video>
-    </div>
-
-    <!-- Overlay Content -->
-    <div class="absolute inset-0 flex flex-col items-start justify-center px-4 sm:px-6 lg:px-8">
-      <div class="max-w-[1831px] mx-auto w-full h-full flex flex-col justify-center">
-        <!-- Text Block (right-aligned) -->
-        <div class="relative self-end w-full lg:pr-[20%] lg:pl-[15%]">
-          <!-- Cursive accent (top-left) -->
-          <div class="absolute -top-4 lg:-top-8 left-0 mix-blend-exclusion">
-            <span class="font-condiment text-neon text-17 sm:text-36 md:text-48 lg:text-68 normal-case">
-              Go beyond
-            </span>
-          </div>
-
-          <!-- Heading -->
-          <div class="font-grotesk uppercase text-right leading-[1.1] text-16 sm:text-32 md:text-48 lg:text-60">
-            <p class="mb-4 sm:mb-8 lg:mb-12">JOIN US.</p>
-            <p>REVEAL WHAT'S HIDDEN.</p>
-            <p>DEFINE WHAT'S NEXT.</p>
-            <p>FOLLOW THE SIGNAL.</p>
-          </div>
+        <!-- Footer: Developer Credit -->
+        <div class="text-center text-white/40 text-xs mt-4 border-t border-white/5 pt-4">
+          Developed by <span class="text-white/60 font-medium">GOJO</span>
         </div>
       </div>
     </div>
 
-    <!-- Social Icons (Bottom-left) -->
-    <div class="absolute left-[8%] bottom-[12%] sm:bottom-[15%] lg:bottom-[20%]">
-      <div class="liquid-glass rounded-[0.5rem] sm:rounded-[0.75rem] md:rounded-[1rem] lg:rounded-[1.25rem] flex flex-col divide-y divide-white/10">
-        <button class="cta-btn-w cta-btn-h flex items-center justify-center hover:bg-white/10 transition">
-          <i data-lucide="mail" class="w-6 h-6 lg:w-8 lg:h-8 text-cream"></i>
-        </button>
-        <button class="cta-btn-w cta-btn-h flex items-center justify-center hover:bg-white/10 transition">
-          <i data-lucide="twitter" class="w-6 h-6 lg:w-8 lg:h-8 text-cream"></i>
-        </button>
-        <button class="cta-btn-w cta-btn-h flex items-center justify-center hover:bg-white/10 transition">
-          <i data-lucide="github" class="w-6 h-6 lg:w-8 lg:h-8 text-cream"></i>
-        </button>
-      </div>
-    </div>
-  </section>
+  </div>
+</div>
 
-  <!-- Init Lucide Icons -->
-  <script>
-    lucide.createIcons();
-  </script>
+<!-- Init Lucide Icons -->
+<script>
+  lucide.createIcons();
+</script>
 </body>
 </html>
