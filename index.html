@@ -159,11 +159,11 @@ body{font-family:'Cairo',sans-serif;background:#030b18;color:#f0f4ff;overflow-x:
 
 /* SECTIONS */
 section{position:relative;width:100%}
-.vid-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.vid-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;will-change:transform}
 .scrim{position:absolute;inset:0}
 
 /* HERO */
-#hero{min-height:100vh;border-radius:0 0 32px 32px;overflow:hidden}
+#hero{min-height:100vh;border-radius:0 0 32px 32px;overflow:hidden;isolation:isolate}
 .hero-inner{position:relative;z-index:10;width:100%;max-width:1400px;margin:0 auto;padding:0 20px;min-height:100vh;display:flex;flex-direction:column}
 .header{display:flex;align-items:center;justify-content:space-between;padding-top:32px}
 .logo{font-family:'Cairo',sans-serif;font-weight:800;font-size:15px;color:#fff;text-transform:uppercase;letter-spacing:.2em}
@@ -374,7 +374,7 @@ footer p{font-family:'Cairo',sans-serif;color:rgba(255,255,255,.28);font-size:.8
 
   <!-- HERO -->
   <section id="hero">
-    <video class="vid-bg" autoplay loop muted playsinline src="https://files.catbox.moe/zwidyg.mp4"></video>
+    <video class="vid-bg" autoplay loop muted playsinline webkit-playsinline src="https://files.catbox.moe/zwidyg.mp4"></video>
     <div class="scrim" style="background:linear-gradient(to bottom,rgba(0,0,0,.55),rgba(0,0,0,.2),rgba(0,0,0,.7))"></div>
     <div class="hero-inner">
       <div class="header">
@@ -410,7 +410,7 @@ footer p{font-family:'Cairo',sans-serif;color:rgba(255,255,255,.28);font-size:.8
 
   <!-- ABOUT -->
   <section id="about">
-    <video class="vid-bg" autoplay loop muted playsinline src="https://files.catbox.moe/zwidyg.mp4" style="filter:brightness(.2) hue-rotate(180deg)"></video>
+    <video class="vid-bg" autoplay loop muted playsinline webkit-playsinline src="https://files.catbox.moe/zwidyg.mp4" style="filter:brightness(.2) hue-rotate(180deg)"></video>
     <div class="scrim" style="background:rgba(0,0,0,.55)"></div>
     <div class="about-inner">
       <div class="about-top">
@@ -530,7 +530,7 @@ footer p{font-family:'Cairo',sans-serif;color:rgba(255,255,255,.28);font-size:.8
   <!-- CTA -->
   <section id="cta">
     <div class="cta-vid-wrap">
-      <video class="cta-vid" autoplay loop muted playsinline src="https://files.catbox.moe/zwidyg.mp4"></video>
+      <video class="cta-vid" autoplay loop muted playsinline webkit-playsinline src="https://files.catbox.moe/zwidyg.mp4"></video>
       <div class="cta-overlay"></div>
       <div class="cta-content">
         <span class="cta-accent">تواصل معي ✦</span>
@@ -562,7 +562,7 @@ footer p{font-family:'Cairo',sans-serif;color:rgba(255,255,255,.28);font-size:.8
 </div>
 
 <a id="channel-btn" href="https://whatsapp.com/channel/0029VbD5ciE9Gv7WMTldg60J" target="_blank">
-  <i class="fab fa-whatsapp"></i> قناة ADRIAN
+  <i class="fab fa-whatsapp"></i> القناة
 </a>
 
 <!-- Firebase -->
@@ -746,6 +746,15 @@ new IntersectionObserver(entries=>{
   }
 },{threshold:.3}).observe(document.getElementById('stats'));
 </script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+  document.querySelectorAll("video").forEach(v=>{
+    v.muted=true;
+    v.play().catch(()=>{});
+    document.addEventListener("click",()=>v.play().catch(()=>{}),{once:true});
+    document.addEventListener("touchstart",()=>v.play().catch(()=>{}),{once:true});
+  });
+});
+</script>
 </body>
 </html>
-
